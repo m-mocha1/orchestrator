@@ -1,7 +1,7 @@
 # what i need to know for this project.
 - kubernetes is like a smart docker-compose + autoscaler + load balancer for many machines.
 -key words
-1. Cluser : a group of machines managed by kubernetes.
+1. Cluster : a group of machines managed by kubernetes.
 2. Node : one machine in the cluster(VM, server).
 
 - in this project we have 2 vm
@@ -27,7 +27,7 @@
  * usually: 1 container = 1 pod (a pod running inv-app and another one for bil-app, etc)
  * pods die and recreated all happens automaticly
 ### Deployment 
- * keep n repicas of this pod running if a pod dies deplyment create it again.
+ * keep n replicas of this pod running if a pod dies deplyment create it again.
  * used for inv-app and api-gateway-app deployment and auto scaling
 ### StatefulSet
 * keep stable storage used for databases inv-db and bil-db and the billing-app
@@ -47,7 +47,7 @@
 6. rabbitmq (port 5672).
 
 # Ingress (entry from outside world)
-* Inside cluster, Services are fine. To expose HTTP to the outside (your browser, Postman):
+* Inside cluster, Services are fine To expose HTTP to the outside (your browser, Postman):
 
 *  Ingress:Takes incoming HTTP from outside.
 * Routes to a Service.
@@ -69,5 +69,14 @@ PersistentVolume (PV): actual disk.
  1. minReplicas: 1
  2. maxReplicas: 3
  3. target CPU: 60%
-* So when CPU > 60%, it adds pods up to 3; when low, it scales down to 1.
+* So when CPU > 60%, it adds pods up to 3; when low, it scales down to 
 
+# Manifests 
+- they are a simply YAML conf files the describe what should run in a cluster and how it should behave 
+
+- what to create 
+- how it should run 
+- where it should run
+- what resources it needs 
+- what secrete it uses
+- how other services will find it 
