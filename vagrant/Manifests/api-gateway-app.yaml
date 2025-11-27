@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-app
+  namespace: movie-platform
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway-app
+  template:
+    metadata:
+      labels:
+        app: api-gateway-app
+    spec:
+      containers:
+        - name: api-gateway-app
+          image: admary/api-gateway-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            # Port the gateway listens on
+            - name: PORT
+              value: "3000"
+
+            # URL for the inventory service (what your gateway code expects)
+            - name: INVENTORY_URL
+              value: "http://inventory-app:8080"
+
+            # RabbitMQ connection for sending billing messages
+            - name: AMQP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: AMQP_URL
+            - name: RABBIT_QUEUE
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: RABBIT_QUEUE
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway-app
+  namespace: movie-platform
+spec:
+  selector:
+    app: api-gateway-app
+  ports:
+    - name: http
+      port: 3000        # service port inside the cluster
+      targetPort: 3000  # container port
+      nodePort: 30080   # external port on each node
+  type: NodePort
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-gateway-app-hpa
+  namespace: movie-platform
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-gateway-app
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
