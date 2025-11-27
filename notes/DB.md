@@ -113,3 +113,31 @@ DB_PORT=5432
 DB_USER / DB_PASSWORD / DB_NAME from Secret or ConfigMap.
 
 # do the same for the billing-db
+
+# Initialize databases
+From k3s-master:
+
+```bash
+# temp client pod
+sudo kubectl run pg-client -n movie-platform --rm -it --image=postgres:16 -- bash
+
+# Inventory DB tables
+PGPASSWORD=supersecretpassword psql -h inventory-db -U inventory_user -d inventory_db << 'SQL'
+CREATE TABLE IF NOT EXISTS movies (
+  id      SERIAL PRIMARY KEY,
+  title   TEXT NOT NULL,
+  year    INT,
+  stock   INT NOT NULL DEFAULT 0
+);
+SQL
+
+# Billing DB tables
+PGPASSWORD=1234 psql -h billing-db -U m -d billing_db << 'SQL'
+CREATE TABLE IF NOT EXISTS orders (
+  id              SERIAL PRIMARY KEY,
+  user_id         INT NOT NULL,
+  number_of_items INT NOT NULL,
+  total_amount    INT NOT NULL,
+  created_at      TIMESTAMP NOT NULL DEFAULT NOW()
+);
+SQL

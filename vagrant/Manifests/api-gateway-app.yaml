@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: api-gateway-app
-          image: admary/api-gateway-app:latest
-          imagePullPolicy: IfNotPresent
+          image: admary/api-gateway-app:v2
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
               name: http
