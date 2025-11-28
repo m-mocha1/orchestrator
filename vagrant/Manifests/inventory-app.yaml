@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: inventory-app
-          image: admary/inventory-app:v4
+          image: admary/inventory-app:v16
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
