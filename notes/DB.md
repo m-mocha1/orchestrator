@@ -141,3 +141,20 @@ CREATE TABLE IF NOT EXISTS orders (
   created_at      TIMESTAMP NOT NULL DEFAULT NOW()
 );
 SQL
+```
+
+# if you want ot check the billing-db
+```bash
+sudo kubectl run pg-client -n movie-platform --rm -it --image=postgres:16 -- bash
+```
+
+- inside do 
+```bash
+PGPASSWORD=1234 psql -h billing-db -U m -d billing_db -c '\dt'
+```
+
+- to get all orders
+```bash
+PGPASSWORD=1234 psql -h billing-db -U m -d billing_db -c 'SELECT * FROM orders ORDER BY id;'
+```
+
