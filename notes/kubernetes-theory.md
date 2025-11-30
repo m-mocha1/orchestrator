@@ -80,3 +80,31 @@ PersistentVolume (PV): actual disk.
 - what resources it needs 
 - what secrete it uses
 - how other services will find it 
+
+# a Pod 
+
+```vbnet
+POD
+ ├── Container 1  (your app image)
+ ├── Container 2  (sidecar, logger, proxy, etc.)  [optional]
+ ├── Shared network namespace
+ ├── Shared storage volumes
+ └── Shared IP address
+```
+
+
+
+
+```pgsql
+     +---------------- POD ---------------+
+     |                                     |
+     |   (Container A) api-gateway-app     |
+     |                                     |
+     |   (Container B) log-sidecar         |
+     |                                     |
+     +-------------------------------------+
+
+Container A  ← built from Docker image  
+Pod          ← created by Kubernetes  
+Deployment   ← ensures Pod stays running
+```
