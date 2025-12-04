@@ -37,7 +37,7 @@ Kubernetes reads the file and creates/updates resources to match what the manife
 # 7. Explain each K8s manifest (main ones).
 - Namespace : group to organize and isoloate
 - Deployment : handle repiclas rolling update and self-healing
-- service : stable networking Types 
+
 
 # 8. What is a StatefulSet in K8s?
 - manages stateful apps like databases it uses ordered startUP and Shutdown and stable storage pre pod.
